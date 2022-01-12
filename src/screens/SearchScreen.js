@@ -1,45 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import yelp from '../api/yelp';
-import RestaurantList from '../components/RestaurantList';
+import { View, Text, StyleSheet } from 'react-native';
 import SearchBar from '../components/SearchBar';
+import useResults from '../hooks/useResults';
 
 const SearchScreen = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState([]);
-  const [errorMsg, setErrorMsg] = useState('')
-  
-  const fetchResults = async () => {
-    try {
-      const res = await yelp.get('/search', {
-      params: {
-        term: searchTerm,
-        limit: 50,
-        location: 'chicago'
-      }
-    })
-    setResults(await res.data.businesses)
-    setErrorMsg('')
-    } catch (err) {
-      setErrorMsg('Opps!! Something went wrong.')
-    }
-    
-  }
+  const [term, setTerm] = useState('');
+  const [searchApi, results, errorMessage] = useResults();
 
   return (
     <View>
-      <SearchBar 
-        searchTerm={searchTerm} 
-        onTermChange={setSearchTerm} 
-        onTermSubmit={fetchResults} 
+      <SearchBar
+        term={term}
+        onTermChange={setTerm}
+        onTermSubmit={() => searchApi(term)}
       />
-      <RestaurantList  />
-      <Text>{results.length}</Text>
-      {errorMsg ? <Text>{errorMsg}</Text> : null}
+      {errorMessage ? <Text>{errorMessage}</Text> : null}
+      <Text>We have found {results.length} results</Text>
     </View>
   );
-}; 
-
-export default SearchScreen;
+};
 
 const styles = StyleSheet.create({});
+
+export default SearchScreen;
