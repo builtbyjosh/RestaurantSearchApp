@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-const RestaurantList = () => {
+const ResultsList = () => {
   return (
     <View>
       <Text></Text>
@@ -9,6 +9,6 @@ const RestaurantList = () => {
   )
 }
 
-export default RestaurantList
+export default ResultsList
 
 const styles = StyleSheet.create({})
